@@ -2,13 +2,21 @@
  *  2019-08-26
  *
  *  Helsinki Fullstack MOOC
- *  Exercises 3.1 - 3.6
+ *  Exercises 3.1 - 3.8
  */
 const express = require('express')
-const app = express()
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
+
+const app = express()
+
+morgan.token('body', function(req, res) {
+    if (req.method == 'POST')
+        return `with params name=${req.body.name} number=${req.body.number}`
+})
 
 app.use(bodyParser.json())
+app.use(morgan(':method :url :res[content-length] - :response-time ms :body'))
 
 let people = [
     {
