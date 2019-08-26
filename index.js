@@ -7,8 +7,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
+const cors = require('cors')
 
 const app = express()
+app.use(cors())
 
 morgan.token('body', function(req, res) {
     if (req.method == 'POST')
@@ -27,7 +29,7 @@ let people = [
     {
         name: 'Ada Lovelace',
         number: '39-44-5323523',
-        id: 4
+        id: 2
     },
     {
         name: 'Dan Abramov',
