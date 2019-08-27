@@ -11,8 +11,8 @@ const db_name = 'test'
 const params = 'retryWrites=true&w=majority'
 
 const peopleSchema = new mongoose.Schema({
-    name: String,
-    number: String
+    name: {type: String, required: true},
+    number: {type: String, required: true}
 })
 
 const Person = mongoose.model('Person', peopleSchema)
