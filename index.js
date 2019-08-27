@@ -11,6 +11,7 @@
  */
 require('dotenv').config()
 const express = require('express')
+const process = require('process')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -21,8 +22,8 @@ const PORT = process.env.PORT || 3001
 const app = express()
 app.use(cors())
 
-morgan.token('body', function(req, res) {
-    if (req.method == 'POST')
+morgan.token('body', req => {
+    if (req.method === 'POST')
         return `with params name=${req.body.name} number=${req.body.number}`
 })
 

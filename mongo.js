@@ -27,7 +27,7 @@ const peopleSchema = new mongoose.Schema({
         },
     }
 })
-peopleSchema.plugin(uniqueValidator);
+peopleSchema.plugin(uniqueValidator)
 
 const Person = mongoose.model('Person', peopleSchema)
 
@@ -58,7 +58,7 @@ const list = () => {
 }
 
 const find = (name) => {
-    return Person.findOne({name: name}).exec()
+    return Person.findOne({ name: name }).exec()
 }
 
 const get = (id) => {

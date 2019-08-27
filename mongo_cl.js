@@ -10,6 +10,7 @@
  *  MONGODB_URL
  */
 require('dotenv').config()
+const process = require('process')
 const mongo = require('./mongo')
 
 if (process.argv.length >= 3 && process.argv[2] === 'help') {
@@ -25,7 +26,7 @@ if (process.argv.length >= 5) {
     const name = process.argv[3]
     const number = process.argv[4]
 
-    mongo.save(name, number).then(response => {
+    mongo.save(name, number).then(() => {
         console.log(`added ${name} number ${number}`)
         mongo.disconnect()
     })
