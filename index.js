@@ -53,29 +53,11 @@ app.get('/api/persons', (req, res, next) => {
 app.post('/api/persons', (req, res, next) => {
     const person = req.body
 
-    // TODO these aren't necessary anymore reall? are they?
-    // since mongo validates them anyway
-    if (!person.name || person.name.length === 0) {
-        res.status(400).json({error: "name can't be empty"})
-    }
-    else if (!person.number || person.number.length === 0) {
-        res.status(400).json({error: "number can't be empty"})
-    }
-    else {
-        mongo.find(person.name).then(doc => {
-            if (!doc) {
-                mongo.save(person.name, person.number).then(() => {
-                    console.log(`added ${person.name} number ${person.number}`)
-                    res.json(person)
-                })
-                .catch(error => next(error))
-            }
-            else {
-                console.log(`Person: ${person.name} already exists`)
-                res.status(400).json({error: `${person.name} already exists`})
-            }
-        })
-    }
+    mongo.save(person.name, person.number).then(() => {
+        console.log(`added ${person.name} number ${person.number}`)
+        res.json(person)
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -89,7 +71,6 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 app.put('/api/persons/:id', (req, res, next) => {
     const data = req.body
-    const index = Number(req.params.id)
     const id = req.params.id
 
     mongo.get(id).then(person => {
@@ -104,7 +85,6 @@ app.put('/api/persons/:id', (req, res, next) => {
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
-    const index= Number(req.params.id)
     const id = req.params.id
 
     mongo.remove(id).then(() => {
@@ -126,7 +106,7 @@ const errorHandler = (error, req, res, next) => {
         return res.status(400).send({ error: 'malformed id' })
     }
     else if (error.name === 'ValidationError') {
-        return res.status(400).send({ error: 'missing name or number' })
+        return res.status(400).send({ error: error.message })
     }
     next(error)
 }

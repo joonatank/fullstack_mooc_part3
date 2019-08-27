@@ -6,14 +6,16 @@
  */
 
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
 const db_name = 'test'
 const params = 'retryWrites=true&w=majority'
 
 const peopleSchema = new mongoose.Schema({
-    name: {type: String, required: true},
+    name: {type: String, required: true, unique: true},
     number: {type: String, required: true}
 })
+peopleSchema.plugin(uniqueValidator);
 
 const Person = mongoose.model('Person', peopleSchema)
 
@@ -27,12 +29,7 @@ const disconnect = () => {
 }
 
 const save = (name, number) => {
-    const person = new Person({
-        name: name,
-        number: number
-    })
-
-    return person.save()
+    return new Person({ name: name, number: number }).save()
 }
 
 const remove = (id) => {
