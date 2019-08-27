@@ -2,7 +2,7 @@
  *  2019-08-26
  *
  *  Helsinki Fullstack MOOC
- *  Exercises 3.1 - 3.8, 3.13 - 3.18
+ *  Exercises 3.1 - 3.8, 3.13 - 3.20
  *
  *  REQUIRES following env variables to be set (in .env file)
  *  USERNAME

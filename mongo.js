@@ -2,7 +2,7 @@
  *  2019-08-26
  *
  *  Helsinki Fullstack MOOC
- *  Exercises 3.13 - 3.14
+ *  Exercises 3.13 - 3.20
  */
 
 const mongoose = require('mongoose')
@@ -12,8 +12,20 @@ const db_name = 'test'
 const params = 'retryWrites=true&w=majority'
 
 const peopleSchema = new mongoose.Schema({
-    name: {type: String, required: true, unique: true},
-    number: {type: String, required: true}
+    name: {
+        type: String, required: true, unique: true,
+        validate: {
+            validator: (v) => /\w{3}/.test(v),
+            message: props => `${props.value} is not long enough`
+        },
+    },
+    number: {
+        type: String, required: true,
+        validate: {
+            validator: (v) => /\d{8}/.test(v.replace(/-/g, '')),
+            message: props => `${props.value} is not long enough`
+        },
+    }
 })
 peopleSchema.plugin(uniqueValidator);
 
