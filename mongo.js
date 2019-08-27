@@ -7,7 +7,6 @@
 
 const mongoose = require('mongoose')
 
-const server_url = 'cluster0-s1nyv.mongodb.net'
 const db_name = 'test'
 const params = 'retryWrites=true&w=majority'
 
@@ -18,7 +17,7 @@ const peopleSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', peopleSchema)
 
-const connect = (username, password) => {
+const connect = (username, password, server_url) => {
     const url = `mongodb+srv://${username}:${password}@${server_url}/${db_name}?${params}`
     mongoose.connect(url, { useNewUrlParser: true })
 }
@@ -36,6 +35,15 @@ const save = (name, number) => {
     return person.save()
 }
 
+const remove = (doc) => {
+    const q = Person.findByIdAndDelete(doc._id)
+    return q.exec()
+}
+
+const count = () => {
+    return Person.count({})
+}
+
 const list = () => {
     return Person.find({})
 }
@@ -44,5 +52,6 @@ module.exports = {
     connect: connect,
     disconnect: disconnect,
     save: save,
+    remove: remove,
     list: list
 }

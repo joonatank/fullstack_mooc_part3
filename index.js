@@ -2,12 +2,19 @@
  *  2019-08-26
  *
  *  Helsinki Fullstack MOOC
- *  Exercises 3.1 - 3.8
+ *  Exercises 3.1 - 3.8, 3.13 - 3.14
+ *
+ *  REQUIRES following env variables to be set (in .env file)
+ *  USERNAME
+ *  PASSWORD
+ *  MONGODB_URL
  */
+require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
+const mongo = require('./mongo')
 
 const PORT = process.env.PORT || 3001
 
@@ -22,42 +29,24 @@ morgan.token('body', function(req, res) {
 app.use(bodyParser.json())
 app.use(morgan(':method :url :res[content-length] - :response-time ms :body'))
 
-let people = [
-    {
-        name: 'Arto Hellas',
-        number: '040-123456',
-        id: 1
-    },
-    {
-        name: 'Ada Lovelace',
-        number: '39-44-5323523',
-        id: 2
-    },
-    {
-        name: 'Dan Abramov',
-        number: '12-43-234345',
-        id: 3
-    },
-    {
-        name: 'Mary Poppendieck',
-        number: '39-23-6423122',
-        id: 4
-    }
-]
+
+mongo.connect(process.env.USERNAME, process.env.PASSWORD, process.env.MONGODB_URL)
 
 app.get('/info', (req, res) => {
-    const msg = `<p>Phonebook has info for ${people.length} people</p>
-        <p>${new Date()}</p>`
-    res.send(msg)
+    mongo.count().then(results => {
+        const msg = `<p>Phonebook has info for ${results.length} people</p>
+            <p>${new Date()}</p>`
+        res.send(msg)
+    })
 })
 
 app.get('/api/persons', (req, res) => {
-    res.send(people)
+    mongo.list().then(results => {
+        res.send(results)
+    })
 })
 
 app.post('/api/persons', (req, res) => {
-    const id = Math.floor(Math.random()*10000000)
-
     const person = req.body
     if (person.name.length === 0) {
         res.status(400).json({error: "name can't be empty"})
@@ -65,38 +54,52 @@ app.post('/api/persons', (req, res) => {
     else if (person.number.length === 0) {
         res.status(400).json({error: "number can't be empty"})
     }
+    /* TODO fix
     else if (people.filter(x => x.name === person.name).length !== 0) {
         res.status(400).json({error: "name must be unique"})
     }
+    */
     else {
-        person.id = id
-        people = people.concat(person)
+        mongo.save(person.name, person.number).then(() => {
+            console.log(`added ${person.name} number ${person.number}`)
+        })
         res.json(person)
     }
 })
 
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
-    const person = people.find(x => x.id === id)
 
-    if (person)
-        res.send(person)
-    else
-        res.status(404).end()
+    mongo.list().then(results => {
+        if (results.length <= id)
+            res.status(404).end()
+        else {
+            const person = results[id]
+            res.send(person)
+        }
+    })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
-    const person = people.find(x => x.id === id)
 
-    if (person) {
-        people = people.filter(x => x.id !== id)
-        res.status(204).end()
-    }
-    else
-        res.status(404).end()
+    mongo.list().then(results => {
+        if (results.length <= id)
+            res.status(404).end()
+        else {
+            const person = results[id]
+            console.log(`Removing: ${person.name}`)
+            mongo.remove(person)
+            res.status(204).end()
+        }
+    })
 })
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
+})
+
+process.on('SIGINT', () => {
+    mongo.disconnect()
+    process.exit(0)
 })

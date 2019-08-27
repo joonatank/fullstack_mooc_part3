@@ -3,20 +3,23 @@
  *
  *  Helsinki Fullstack MOOC
  *  Exercises 3.12
+ *
+ *  REQUIRES following env variables to be set (in .env file)
+ *  USERNAME
+ *  PASSWORD
+ *  MONGODB_URL
  */
+require('dotenv').config()
 const mongo = require('./mongo')
 
-if (process.argv.length < 3) {
+if (process.argv.length >= 3 && process.argv[2] === 'help') {
     console.log('Missing arguments')
-    console.log('Usage to add: node mongo.js {password} {name_to_add} {phonenumber}')
-    console.log('Usage to print: node mongo.js {password}')
+    console.log('Usage to add: node mongo.js {name_to_add} {phonenumber}')
+    console.log('Usage to print: node mongo.js')
     process.exit(1)
 }
 
-const username = 'fido'
-const password = process.argv[2]
-
-mongo.connect(username, password)
+mongo.connect(process.env.USERNAME, process.env.PASSWORD, process.env.MONGODB_URL)
 
 if (process.argv.length >= 5) {
     const name = process.argv[3]
