@@ -10,18 +10,18 @@ HTTP commands using HTTPie
 # Get a full list of people in the phonebook
 http get http://localhost:3001/api/persons
 
-# Get a single person (using index)
+# Get a single person (using doc id)
 # Indices are not persistent, they are updated after each change in the database
-http get http://localhost:3001/api/persons/1
+http get http://localhost:3001/api/persons/5d6517f054ee28716a44b8d0
 
-# Delete single person (using index)
-http delete http://localhost:3001/api/persons/1
+# Delete single person (using doc id)
+http delete http://localhost:3001/api/persons/5d6517f054ee28716a44b8d0
 
 # Add a new person
 http post http://localhost:3001/api/persons name="Foo" number=55-555-555555
 
-# Change already existing person by index
-http put http://localhost:3001/api/persons/1 name="Foo" number=55-555-555555
+# Change already existing person
+http put http://localhost:3001/api/persons/5d6517f054ee28716a44b8d0 name="Foo" number=55-555-555555
 
 # Get server info
 http get http://localhost:3001/info
@@ -33,6 +33,8 @@ Errors
 # Other endpoints return 404: unknown endpoint error
 
 # PUT and POST without name and number will return 400: missing name or number
+
+# POST with an existing name will return 400: ${name} already exists
 
 # GET with an index not in the database will return 404
 

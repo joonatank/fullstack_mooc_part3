@@ -35,17 +35,25 @@ const save = (name, number) => {
     return person.save()
 }
 
-const remove = (doc) => {
-    const q = Person.findByIdAndDelete(doc._id)
+const remove = (id) => {
+    const q = Person.findByIdAndDelete(id)
     return q.exec()
 }
 
 const count = () => {
-    return Person.count({})
+    return Person.countDocuments({})
 }
 
 const list = () => {
     return Person.find({})
+}
+
+const find = (name) => {
+    return Person.findOne({name: name}).exec()
+}
+
+const get = (id) => {
+    return Person.findById(id)
 }
 
 module.exports = {
@@ -53,5 +61,8 @@ module.exports = {
     disconnect: disconnect,
     save: save,
     remove: remove,
+    get: get,
+    find: find,
+    count: count,
     list: list
 }
