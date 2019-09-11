@@ -3,6 +3,27 @@ Part 3 exercises
 
 NodeJS backend for Phonebook
 
+## Usage
+
+### Heroku
+Deployed version can be found at:
+
+https://fathomless-shore-94502.herokuapp.com/api/persons
+
+### Installation
+Prerequisits:
+
+- npm: 6.10
+- node: 12.9.0
+- MongoDB (for example Atlas)
+
+- git pull
+- npm install
+- setup .env
+  * USERNAME
+  * PASSWORD
+  * MONGODB_URL
+
 ## API
 HTTP commands using HTTPie
 
@@ -41,7 +62,3 @@ Errors
 # GET with a malformed index (NaN) will return 404: malformed index
 ```
 
-## Heroku
-Deployed version can be found at:
-
-https://fathomless-shore-94502.herokuapp.com/api/persons

@@ -20,6 +20,7 @@ const mongo = require('./mongo')
 const PORT = process.env.PORT || 3001
 
 const app = express()
+app.use(express.static('build'))
 app.use(cors())
 
 morgan.token('body', req => {
