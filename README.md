@@ -1,14 +1,17 @@
 # Helsinki Fullstack MOOC backend
-Part 3 exercises
+[Part 3 exercises](https://fullstackopen.com/en/part3)
 
 NodeJS backend for Phonebook
 
+Allows saving and retrieving a {name, number} pair like a phonebook to a MongoDB.
+
 ## Usage
 
-### Heroku
-Deployed version can be found at:
+Deployed version can be found in Heroku:
 
-https://fathomless-shore-94502.herokuapp.com/api/persons
+[With front-end](https://fathomless-shore-94502.herokuapp.com/)
+
+[Backend API](https://fathomless-shore-94502.herokuapp.com/api/persons)
 
 ### Installation
 Prerequisits:
@@ -17,12 +20,16 @@ Prerequisits:
 - node: 12.9.0
 - MongoDB (for example Atlas)
 
-- git pull
-- npm install
-- setup .env
-  * USERNAME
-  * PASSWORD
-  * MONGODB_URL
+``` bash
+git pull
+npm install
+
+vim .env
+# Edit the following variables for MongoDB
+# USERNAME
+# PASSWORD
+# MONGODB_URL
+```
 
 ## API
 HTTP commands using HTTPie
